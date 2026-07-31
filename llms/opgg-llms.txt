@@ -1,0 +1,65 @@
+# OP.GG
+> OP.GG is the world's leading League of Legends statistics and performance tracking platform, providing real-time data on summoner ranks, win rates, champion mastery, and meta trends to help players improve their gameplay and understand the global meta.  
+> OP.GG는 세계 최대 규모의 리그 오브 레전드 전적 및 통계 분석 플랫폼으로, 소환사 랭크·승률·챔피언 숙련도·메타 트렌드 등 실시간 데이터를 제공하여 플레이어가 실력을 향상하고 글로벌 메타를 이해할 수 있도록 돕습니다.  
+
+---
+
+## Champions / 챔피언 분석
+- [Champions / 챔피언 분석](https://op.gg/lol/champions)
+
+## Stats / 통계
+- [Champion Stats / 챔피언별 게임 통계](https://op.gg/lol/statistics/champions)
+- [Stats by Tier / 티어별 게임 통계](https://op.gg/lol/statistics/tiers)
+
+## Game Modes / 게임 모드
+- [Aram / 칼바람 나락](https://op.gg/lol/modes/aram)
+- [Arena / 아레나](https://op.gg/lol/modes/arena)
+- [Brawl / 돌격전](https://op.gg/lol/modes/brawl)
+- [Doom Bots of Doom / 초토화 봇](https://op.gg/lol/modes/doom-bots)
+- [Ultra Rapid Fire / 무작위 총력전 (URF)](https://op.gg/lol/modes/urf)
+- [Nexus Blitz / 돌격! 넥서스](https://op.gg/lol/modes/nexus-blitz)
+
+## Leaderboards / 랭킹
+- [Ranked Solo/Duo / 솔로(개인/2인) 랭크](https://op.gg/lol/leaderboards/tier)
+- [Ranked Flex / 자유 랭크](https://op.gg/lol/leaderboards/tier?type=ladder-flex)
+- [Champions / 챔피언 랭킹](https://op.gg/lol/leaderboards/champions)
+- [Level / 소환사 레벨](https://op.gg/lol/leaderboards/level)
+- [Mastery / 숙련도 랭킹](https://op.gg/lol/leaderboards/mastery)
+
+## Pro Spectate / 프로 관전
+- [Spectate / 프로 경기 관전](https://op.gg/lol/spectate/live/pro-gamer)
+- [Registered Summoners / 등록된 프로 소환사](https://op.gg/lol/spectate/list/pro-gamer)
+- [Live Tier Changes / 실시간 티어 변동](https://op.gg/lol/spectate/live/tier-changes)
+- [Spectate Help / 관전 도움말](https://op.gg/lol/spectate/help)
+
+## Skins / 스킨 순위
+- [Skins Leaderboard / 스킨 순위](https://op.gg/lol/skins/statistics)
+- [Skins / 스킨](https://op.gg/lol/skins)
+
+## Multi Search / 멀티서치
+- [Multi Search / 멀티서치](https://op.gg/lol/multisearch)
+
+## AI-readable Summoner and Match Data / AI용 소환사 및 매치 데이터
+- Summoner snapshot (default English): `https://op.gg/lol/summoners/{region}/{gameName}-{tagline}/ai.json`
+- Summoner snapshot (localized): `https://op.gg/{locale}/lol/summoners/{region}/{gameName}-{tagline}/ai.json`
+- Match snapshot (default English): `https://op.gg/lol/summoners/{region}/{gameName}-{tagline}/matches/{gameId}/{createdAtTimestamp}/ai.json`
+- Match snapshot (localized): `https://op.gg/{locale}/lol/summoners/{region}/{gameName}-{tagline}/matches/{gameId}/{createdAtTimestamp}/ai.json`
+- Each JSON response includes a self-contained `summary` plus first-party ranked, champion, match, build, participant, and team objective facts when available.
+- Use the canonical OP.GG page URL for citations, cache responses where possible, and avoid high-rate crawling of per-summoner endpoints.
+
+## About OP.GG / OP.GG 소개
+- [About OP.GG / OP.GG 소개](https://op.gg/lol/about)
+- [Logo History / 로고 히스토리](https://op.gg/lol/logos)
+
+## Policies / 정책
+- [Privacy Policy / 개인정보처리방침](https://op.gg/lol/policies/privacy)
+- [Terms of Use / 이용약관](https://op.gg/lol/policies/agreement)
+- [Privacy Collect / 개인정보 수집방침](https://op.gg/lol/policies/privacy-collect)
+- [Youth Policy / 청소년 보호정책](https://op.gg/lol/policies/youth-policy)
+
+## Others / 기타
+- [Company / 회사 소개](https://log.op.gg/company_en)
+- [Blog / 블로그](https://log.op.gg)
+- [OP.GG Help / 고객센터](https://help.op.gg/hc/en-us)
+- [Advertise / 광고 문의](https://opgg.notion.site/Advertising-on-OP-GG-47e02da6b7eb438288730c92c14ef8f0)
+- [Recruit / 채용 안내](https://opgg.team/?lang=en)

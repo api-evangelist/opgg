@@ -1,0 +1,34 @@
+generated: '2026-07-20'
+method: searched
+source: https://github.com/orgs/opgginc/repositories + https://packagist.org
+notes: >-
+  OP.GG does not publish a client SDK for its own game-data surface (game data is
+  collected via each game company's official APIs and is not resold to third
+  parties). It does publish first-party open-source developer packages via its
+  opgginc GitHub org, catalogued below. The primary programmatic surface is the
+  hosted MCP server (see mcp/opgg-mcp.yml).
+packages:
+- language: php
+  registry: packagist
+  name: opgginc/laravel-mcp-server
+  url: https://packagist.org/packages/opgginc/laravel-mcp-server
+  repository: https://github.com/opgginc/laravel-mcp-server
+  install: composer require opgginc/laravel-mcp-server
+  official: true
+  description: Laravel package for implementing secure Model Context Protocol servers.
+- language: php
+  registry: packagist
+  name: opgg/riotquest
+  url: https://packagist.org/packages/opgg/riotquest
+  repository: https://github.com/opgginc/php-riotapi-request
+  install: composer require opgg/riotquest
+  official: true
+  description: RiotQuest — PHP Riot API client library focused on multi-request fetching.
+- language: swift
+  registry: homebrew
+  name: opencode-bar
+  url: https://github.com/opgginc/opencode-bar
+  repository: https://github.com/opgginc/homebrew-opencode-bar
+  install: brew install opgginc/opencode-bar/opencode-bar
+  official: true
+  description: Menu-bar token-usage tracker for OpenCode.

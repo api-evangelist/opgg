@@ -1,7 +1,17 @@
 aid: opgg
 name: OPGG
-description: OPGG is a company surfaced as a portfolio company of 500-global and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  OP.GG is the world's leading League of Legends statistics and performance
+  tracking platform. Founded in Seoul, South Korea and launched in 2013, it grew
+  from a LoL stats search engine into a global gaming platform serving tens of
+  millions of monthly active users across games including League of Legends,
+  Valorant, Teamfight Tactics, Overwatch 2, and PUBG. OP.GG surfaces summoner
+  ranks, win rates, champion mastery, builds, tier lists, match history, and
+  live meta trends. Its programmatic surface centers on an official, hosted
+  Model Context Protocol (MCP) server that gives AI agents access to LoL, TFT,
+  and Valorant game data, plus first-party AI-readable ai.json summoner/match
+  snapshot endpoints advertised in its published llms.txt. OP.GG is backed by
+  500 Global, SBVA, DS Asset Management, Dunamu & Partners, and others.
 url: https://raw.githubusercontent.com/api-evangelist/opgg/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -9,12 +19,44 @@ x-backed-by:
 - 500-global
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
+image: https://op.gg/images/logo/logo.svg
 tags:
 - Company
-apis: []
+- Gaming
+- Esports
+- Game Data
+- Analytics
+- League of Legends
+- Valorant
+- Statistics
+- MCP
+apis:
+- name: OP.GG MCP Server
+  description: >-
+    Official Model Context Protocol server providing AI agents access to OP.GG
+    game data for League of Legends, Teamfight Tactics, and Valorant over
+    Streamable HTTP.
+  humanURL: https://github.com/opgginc/opgg-mcp
+  baseURL: https://mcp-api.op.gg/mcp
+  properties:
+  - type: MCPServer
+    url: mcp/opgg-mcp.yml
+  - type: Documentation
+    url: https://github.com/opgginc/opgg-mcp
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -23,3 +65,32 @@ maintainers:
 common:
 - type: Website
   url: https://op.gg
+- type: About
+  url: https://op.gg/lol/about
+- type: MCPServer
+  url: mcp/opgg-mcp.yml
+- type: Documentation
+  url: https://github.com/opgginc/opgg-mcp
+- type: GitHubOrganization
+  url: https://github.com/opgginc
+- type: Blog
+  url: https://log.op.gg
+- type: Support
+  url: https://help.op.gg/hc/en-us
+- type: TermsOfService
+  url: https://op.gg/lol/policies/agreement
+- type: PrivacyPolicy
+  url: https://op.gg/lol/policies/privacy
+- type: Packages
+  url: packages/opgg-packages.yml
+- type: LLMsTxt
+  url: llms/opgg-llms.txt
+- type: WellKnown
+  url: well-known/opgg-well-known.yml
+- type: DomainSecurity
+  url: security/opgg-domain-security.yml
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 5
+  pass: local-v1

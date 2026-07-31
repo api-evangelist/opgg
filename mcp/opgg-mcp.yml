@@ -1,0 +1,79 @@
+generated: '2026-07-20'
+method: searched
+status: published
+source: https://github.com/opgginc/opgg-mcp
+server:
+  name: opgg-mcp
+  title: OP.GG MCP Server
+  description: >-
+    Official Model Context Protocol server that provides AI agents with access
+    to OP.GG game data for League of Legends, Teamfight Tactics, and Valorant.
+  transport: http
+  url: https://mcp-api.op.gg/mcp
+  license: MIT
+  repository: https://github.com/opgginc/opgg-mcp
+  registry: '@opgginc/opgg-mcp'
+  install:
+    smithery: npx -y @smithery/cli@latest install @opgginc/opgg-mcp --client claude --key {SMITHERY_API_KEY}
+  notes: >-
+    Most tools require a desired_output_fields parameter to select which fields
+    to return (dot/array/brace path syntax), reducing payload size.
+games:
+- League of Legends
+- Teamfight Tactics
+- Valorant
+tools:
+- name: lol_get_champion_analysis
+  description: Get detailed champion stats (win/pick/ban rates), optimal builds (items, runes, skills, spells), counter matchups, and team synergies
+- name: lol_get_champion_synergies
+  description: Get champion synergy information
+- name: lol_get_lane_matchup_guide
+  description: Get lane matchup guide for a specific lane
+- name: lol_list_champion_details
+  description: Get ability, tip, lore, and stat metadata for up to 10 champions
+- name: lol_list_champion_leaderboard
+  description: Get champion leaderboard data
+- name: lol_list_champions
+  description: List all champion metadata
+- name: lol_list_lane_meta_champions
+  description: Get lane-by-lane champion tiers with win/pick/ban rates, KDA, and tier rankings
+- name: lol_get_summoner_game_detail
+  description: Get detailed information for a specific game (all players)
+- name: lol_get_summoner_profile
+  description: Get summoner profile with rank, tier, LP, win rate, and champion pool
+- name: lol_list_summoner_matches
+  description: Get recent match history with per-game stats
+- name: lol_list_discounted_skins
+  description: Get currently discounted skins
+- name: lol_list_items
+  description: List all item metadata
+- name: lol_get_pro_player_riot_id
+  description: Get Riot ID for a pro player
+- name: lol_esports_list_schedules
+  description: Get upcoming LoL esports schedules with teams, leagues, and match times
+- name: lol_esports_list_team_standings
+  description: Get team standings for a LoL league
+- name: tft_get_champion_item_build
+  description: Get champion item build recommendations
+- name: tft_get_play_style
+  description: Get play style recommendations
+- name: tft_list_augments
+  description: Get augment list and descriptions
+- name: tft_list_champions_for_item
+  description: Get champion recommendations for a specific item
+- name: tft_list_item_combinations
+  description: Get item combination recipes
+- name: tft_list_meta_decks
+  description: Get current meta decks
+- name: valorant_list_agent_compositions_for_map
+  description: Get agent compositions for a specific map
+- name: valorant_list_agent_statistics
+  description: Get agent statistics and meta data
+- name: valorant_list_agents
+  description: Get agent metadata with abilities and roles
+- name: valorant_list_leaderboard
+  description: Get leaderboard by region (ap, br, eu, kr, latam, na)
+- name: valorant_list_maps
+  description: Get map metadata
+- name: valorant_list_player_matches
+  description: Get player match history

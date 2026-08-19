@@ -5,9 +5,8 @@ source: https://github.com/opgginc/opgg-mcp
 server:
   name: opgg-mcp
   title: OP.GG MCP Server
-  description: >-
-    Official Model Context Protocol server that provides AI agents with access
-    to OP.GG game data for League of Legends, Teamfight Tactics, and Valorant.
+  description: Official Model Context Protocol server that provides AI agents with access to OP.GG game
+    data for League of Legends, Teamfight Tactics, and Valorant.
   transport: http
   url: https://mcp-api.op.gg/mcp
   license: MIT
@@ -15,16 +14,16 @@ server:
   registry: '@opgginc/opgg-mcp'
   install:
     smithery: npx -y @smithery/cli@latest install @opgginc/opgg-mcp --client claude --key {SMITHERY_API_KEY}
-  notes: >-
-    Most tools require a desired_output_fields parameter to select which fields
-    to return (dot/array/brace path syntax), reducing payload size.
+  notes: Most tools require a desired_output_fields parameter to select which fields to return (dot/array/brace
+    path syntax), reducing payload size.
 games:
 - League of Legends
 - Teamfight Tactics
 - Valorant
 tools:
 - name: lol_get_champion_analysis
-  description: Get detailed champion stats (win/pick/ban rates), optimal builds (items, runes, skills, spells), counter matchups, and team synergies
+  description: Get detailed champion stats (win/pick/ban rates), optimal builds (items, runes, skills,
+    spells), counter matchups, and team synergies
 - name: lol_get_champion_synergies
   description: Get champion synergy information
 - name: lol_get_lane_matchup_guide
@@ -77,3 +76,11 @@ tools:
   description: Get map metadata
 - name: valorant_list_player_matches
   description: Get player match history
+deployment:
+  mode: remote
+  endpoint: https://mcp-api.op.gg/mcp
+  verified: probed
+  probe: live
+  tools: 30
+  checked: '2026-08-12'
+  source: catalog MCP census

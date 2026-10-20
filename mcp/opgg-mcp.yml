@@ -124,7 +124,7 @@ deployment:
   source: catalog MCP census
 tool_quality:
   tool_count: 29
-  tokens_total: 12290
+  tokens_total: 12285
   tokens_per_tool_median: 256
   heavy_tools:
   - name: lol_get_champion_analysis

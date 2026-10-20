@@ -22,60 +22,98 @@ games:
 - Valorant
 tools:
 - name: lol_get_champion_analysis
-  description: Get detailed champion stats (win/pick/ban rates), optimal builds (items, runes, skills,
-    spells), counter matchups, and team synergies
+  description: Returns detailed champion stats (win/pick/ban rates), optimal builds (items, runes, skills,
+    spells), skill combos, counter matchups, and team synergies for a specific champion and position.
+    MUST call when user mentions any champion, asks for item/skill recommendations, gameplay tips, or
+    matchup strategies. Counter picks available in weak_counters field; each counter includes my_win_rate
+    and counter_win_rate for the head-to-head matchup. Infer position from context if not specified.
 - name: lol_get_champion_synergies
-  description: Get champion synergy information
+  description: Returns synergy recommendations (win rate + role fit) for your champion and the ally lane
+    you specify.
 - name: lol_get_lane_matchup_guide
-  description: Get lane matchup guide for a specific lane
-- name: lol_list_champion_details
-  description: Get ability, tip, lore, and stat metadata for up to 10 champions
-- name: lol_list_champion_leaderboard
-  description: Get champion leaderboard data
-- name: lol_list_champions
-  description: List all champion metadata
-- name: lol_list_lane_meta_champions
-  description: Get lane-by-lane champion tiers with win/pick/ban rates, KDA, and tier rankings
-- name: lol_get_summoner_game_detail
-  description: Get detailed information for a specific game (all players)
-- name: lol_get_summoner_profile
-  description: Get summoner profile with rank, tier, LP, win rate, and champion pool
-- name: lol_list_summoner_matches
-  description: Get recent match history with per-game stats
-- name: lol_list_discounted_skins
-  description: Get currently discounted skins
-- name: lol_list_items
-  description: List all item metadata
+  description: Provides lane matchup guidance for your champion versus a named opponent, including position-specific
+    tips, runes, and item timings.
 - name: lol_get_pro_player_riot_id
-  description: Get Riot ID for a pro player
+  description: Looks up a pro player alias and returns their Riot ID plus team/region metadata so you
+    can link their OP.GG profile.
+- name: lol_get_summoner_game_detail
+  description: 'Returns full match detail (teams, participants, builds, bans) for a specific game id whenever
+    the user drills into a single match. When the question is about one summoner''s performance, also
+    pass focus_riot_id ("gameName#tagLine"): the matching participant is flagged is_target=true — read
+    the focused summoner''s numbers from the participant row where is_target is true, never from a neighbouring
+    participant. If no unique match is found, no row is flagged and data.game_detail.focus_error explains
+    why.'
+- name: lol_get_summoner_profile
+  description: Returns summoner profile with rank, tier, LP, win rate, and champion pool. MUST call for
+    identity/profile/rank queries. DO NOT call for match history. Ask for region if not found.
+- name: lol_list_aram_augments
+  description: Returns ARAM augment stats for a champion with localized names and descriptions. Only tier
+    3 or higher augments are included.
+- name: lol_list_champion_details
+  description: Returns ability, tip, lore, and stat metadata for up to 10 champions (skins/media trimmed
+    for smaller payloads).
+- name: lol_list_champion_leaderboard
+  description: Lists the top master+ players for a champion/region so you can study their builds and match
+    stats.
+- name: lol_list_champions
+  description: Returns every champion's id, key, name, and release date in the requested language.
+- name: lol_list_discounted_skins
+  description: Retrieves information about champion skins that are currently on sale.
+- name: lol_list_items
+  description: Returns localized items (ids, names, descriptions, build trees, gold costs) filtered by
+    map (default Summoner's Rift).
+- name: lol_list_lane_meta_champions
+  description: Returns lane-by-lane champion tiers with win/pick/ban rates, KDA, and tier rankings. Tier
+    1 champions are OP and easy to play - recommend them for strong picks. Filter by position or use "all"
+    for every lane.
+- name: lol_list_skin_stats_for_champion
+  description: Lists a champion's skins in popularity rank order. Default ranking is by play count (1
+    = most played in real matches) — the natural answer for ambiguous popularity questions like "which
+    Aatrox skin is most popular?". Pass sort_by="ownership" ONLY when the user explicitly asks about ownership/possession
+    (e.g., "보유 기준", "가지고 있는 사람 많은 순", "owned by most", "collection-wise", "가장 많이 갖고 있는 스킨"). Internal
+    raw counts are NOT exposed in either mode — only rank position and skin identity. Base skin is always
+    excluded since it inherits every match where no other skin was equipped (play mode) and is universally
+    owned by default (ownership mode).
+- name: lol_list_summoner_matches
+  description: Returns recent match history with per-game stats for the target summoner only (excludes
+    enemy stats). MUST call for match history, performance analysis, or improvement tips. DO NOT call
+    for profile/rank queries. Use lol_get_summoner_game_detail for full game details with all players.
 - name: lol_esports_list_schedules
-  description: Get upcoming LoL esports schedules with teams, leagues, and match times
+  description: 'Returns LoL esports schedules or results. Args: mode="schedule" for future schedules from
+    today, mode="result" for latest completed match results beyond the old 7-day window, optional league
+    such as "lck", "kespa", "ewc", "msi", or "worlds", optional team_name such as "T1", and optional limit
+    up to 50 for result mode. Results include teams, leagues, scores, and match times in ISO 8601 UTC
+    format. Always convert to user''s timezone before presenting.'
 - name: lol_esports_list_team_standings
-  description: Get team standings for a LoL league
+  description: Returns the latest team standings for the requested LoL league.
 - name: tft_get_champion_item_build
-  description: Get champion item build recommendations
+  description: TFT tool for retrieving champion item build information.
 - name: tft_get_play_style
-  description: Get play style recommendations
+  description: This tool provides comments on the playstyle of TFT champions.
 - name: tft_list_augments
-  description: Get augment list and descriptions
+  description: Retrieves metadata for all Teamfight Tactics augments with localized names and descriptions
+    in a table-friendly JSON (headers/rows/header_description). Returns apiName, desc, name, tier, and
+    imageUrl for all augments in the specified language.
 - name: tft_list_champions_for_item
-  description: Get champion recommendations for a specific item
+  description: TFT tool for retrieving champion recommendations for a specific item.
 - name: tft_list_item_combinations
-  description: Get item combination recipes
+  description: TFT tool for retrieving information about item combinations and recipes.
 - name: tft_list_meta_decks
-  description: Get current meta decks
+  description: TFT deck list tool for retrieving current meta decks.
 - name: valorant_list_agent_compositions_for_map
-  description: Get agent compositions for a specific map
+  description: Retrieve agent composition data for a Valorant map.
 - name: valorant_list_agent_statistics
-  description: Get agent statistics and meta data
+  description: Retrieve character statistics data for Valorant, optionally filtered by map.
 - name: valorant_list_agents
-  description: Get agent metadata with abilities and roles
+  description: Returns compact Valorant agent metadata with each agent name and two non-passive skill
+    names localized across supported languages.
 - name: valorant_list_leaderboard
-  description: Get leaderboard by region (ap, br, eu, kr, latam, na)
+  description: Fetch Valorant leaderboard by region
 - name: valorant_list_maps
-  description: Get map metadata
+  description: Retrieve compact Valorant map metadata for maps with agent composition data, including
+    map IDs and localized map names across supported languages.
 - name: valorant_list_player_matches
-  description: Get player match history
+  description: Retrieve match history for a Valorant player using their game name and tag line.
 deployment:
   mode: remote
   endpoint: https://mcp-api.op.gg/mcp
@@ -115,3 +153,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 29

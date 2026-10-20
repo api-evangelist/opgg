@@ -1,0 +1,1325 @@
+{
+  "endpoint": "https://mcp-api.op.gg/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "OP.GG MCP Server",
+    "version": "1.0.0"
+  },
+  "result": {
+    "tools": [
+      {
+        "name": "lol_get_champion_analysis",
+        "description": "Returns detailed champion stats (win/pick/ban rates), optimal builds (items, runes, skills, spells), skill combos, counter matchups, and team synergies for a specific champion and position. MUST call when user mentions any champion, asks for item/skill recommendations, gameplay tips, or matchup strategies. Counter picks available in weak_counters field; each counter includes my_win_rate and counter_win_rate for the head-to-head matchup. Infer position from context if not specified.",
+        "inputSchema": {
+          "properties": {
+            "game_mode": {
+              "description": "Game mode",
+              "enum": [
+                "ranked",
+                "flex",
+                "urf",
+                "aram",
+                "nexus_blitz"
+              ],
+              "type": "string"
+            },
+            "champion": {
+              "description": "Champion name in UPPER_SNAKE_CASE Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            },
+            "position": {
+              "description": "Lane position",
+              "enum": [
+                "all",
+                "none",
+                "top",
+                "mid",
+                "jungle",
+                "adc",
+                "support"
+              ],
+              "type": "string"
+            },
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "tier": {
+              "description": "Rank tier filter for matchup/build stats. Omit for all-tier aggregate (no tier parameter sent upstream). Examples: all, challenger, grandmaster",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- champion\n- data.boots.{ids[],ids_names[],pick_rate,play,win}\n- data.core_items.{ids[],ids_names[],pick_rate,play,win}\n- data.fifth_items[].{ids[],ids_names[],pick_rate,play,win}\n- data.fourth_items[].{ids[],ids_names[],pick_rate,play,win}\n- data.last_items[].{ids[],ids_names[],pick_rate,play,win}\n- data.runes.{id,pick_rate,play,primary_page_id,primary_page_name,primary_rune_ids[],primary_rune_names[],secondary_page_id,secondary_page_name,secondary_rune_ids[],secondary_rune_names[],stat_mod_ids[],stat_mod_names[],win}\n- data.sixth_items[].{ids[],ids_names[],pick_rate,play,win}\n- data.skill_combos[].{name,video_url}\n- data.skill_masteries.builds[].{order[],pick_rate,play,win}\n- data.skill_masteries.{ids[],pick_rate,play,win}\n- data.skills.{order[],pick_rate,play,win}\n- data.starter_items.{ids[],ids_names[],pick_rate,play,win}\n- data.strong_counters[].{champion_id,champion_name,counter_win_rate,my_win_rate,play,win,win_rate}\n- data.summary.average_stats.tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.summary.average_stats.{ban_rate,kda,pick_rate,play,rank,tier,win_rate}\n- data.summary.positions[].counters[].{champion_id,champion_name,play,win}\n- data.summary.positions[].name\n- data.summary.positions[].roles[].name\n- data.summary.positions[].roles[].stats.{play,role_rate,win,win_rate}\n- data.summary.positions[].stats.tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.summary.positions[].stats.{ban_rate,kda,pick_rate,play,role_rate,win_rate}\n- data.summary.{id,is_rip,is_rotation,roles}\n- data.summoner_spells.{ids[],ids_names[],pick_rate,play,win}\n- data.synergies.adc[].synergy_tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.synergies.adc[].{champion_id,champion_name,play,position,score,score_rank,synergy_champion_id,synergy_champion_name,synergy_position,win,win_rate}\n- data.synergies.jungle[].synergy_tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.synergies.jungle[].{champion_id,champion_name,play,position,score,score_rank,synergy_champion_id,synergy_champion_name,synergy_position,win,win_rate}\n- data.synergies.mid[].synergy_tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.synergies.mid[].{champion_id,champion_name,play,position,score,score_rank,synergy_champion_id,synergy_champion_name,synergy_position,win,win_rate}\n- data.synergies.support[].synergy_tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.synergies.support[].{champion_id,champion_name,play,position,score,score_rank,synergy_champion_id,synergy_champion_name,synergy_position,win,win_rate}\n- data.trends.ban.{created_at,rank,rate,version}\n- data.trends.pick.{created_at,rank,rate,version}\n- data.trends.win.{created_at,rank,rate,version}\n- data.trends.{total_position_rank,total_rank}\n- data.weak_counters[].{champion_id,champion_name,counter_win_rate,my_win_rate,play,win,win_rate}\n- data.{damage_type,mythic_items}\n- position\n\nServer-injected fields (returned automatically when applicable — do NOT request these in desired_output_fields):\n- data.counters_meta\n\nField descriptions:\n- mythic_items: Mythic tier items (legendary grade, one per build)\n- strong_counters: Champions this champion performs well against. win_rate and my_win_rate are the selected champion win rate; counter_win_rate is the opponent win rate.\n- weak_counters: Counter picks against this champion. win_rate and counter_win_rate are the counter champion win rate; my_win_rate is the selected champion win rate into that counter.\n- strong_counters[].my_win_rate: Selected champion win rate against this opponent champion.\n- strong_counters[].counter_win_rate: Opponent champion win rate against the selected champion.\n- weak_counters[].my_win_rate: Selected champion win rate against this counter pick.\n- weak_counters[].counter_win_rate: Counter pick win rate against the selected champion.\n- counters_meta: Optional metadata about counter sample sufficiency. Present only when strong_counters or weak_counters are empty due to insufficient matchup sample; include this field when querying counters so empty-result cases are explained instead of silent.\n- damage_type: Champion damage type (AD=Attack Damage, AP=Ability Power, BOTH=Hybrid)\n- skill_combos: Recommended champion skill combos with demo video links\n- skill_masteries: Priority order for maxing abilities (Q/W/E)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "game_mode",
+            "champion",
+            "position",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_get_champion_synergies",
+        "description": "Returns synergy recommendations (win rate + role fit) for your champion and the ally lane you specify.",
+        "inputSchema": {
+          "properties": {
+            "champion": {
+              "description": "Your champion Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            },
+            "my_position": {
+              "description": "Your position",
+              "enum": [
+                "all",
+                "none",
+                "top",
+                "mid",
+                "jungle",
+                "adc",
+                "support"
+              ],
+              "type": "string"
+            },
+            "synergy_position": {
+              "description": "The position you want synergy recommendations for (teammate position)",
+              "enum": [
+                "all",
+                "none",
+                "top",
+                "mid",
+                "jungle",
+                "adc",
+                "support"
+              ],
+              "type": "string"
+            },
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- champion\n- data.synergies[].synergy_tier_data.{rank,rank_prev,rank_prev_patch,tier}\n- data.synergies[].{champion_id,champion_name,play,position,score,score_rank,synergy_champion_id,synergy_champion_name,synergy_position,win,win_rate}\n- lang\n- my_position\n- synergy_position\n\nField descriptions:\n- synergies.*.synergy_tier_data.tier: Synergy tier (0=OP, 1=S, 2=A, 3=B, 4=C)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "champion",
+            "my_position",
+            "synergy_position",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_get_lane_matchup_guide",
+        "description": "Provides lane matchup guidance for your champion versus a named opponent, including position-specific tips, runes, and item timings.",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "position": {
+              "description": "Lane position (top, mid, jungle, adc, support)",
+              "enum": [
+                "all",
+                "none",
+                "top",
+                "mid",
+                "jungle",
+                "adc",
+                "support"
+              ],
+              "type": "string"
+            },
+            "my_champion": {
+              "description": "Champion name in UPPER_SNAKE_CASE Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            },
+            "opponent_champion": {
+              "description": "Champion name in UPPER_SNAKE_CASE Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "position",
+            "my_champion",
+            "opponent_champion"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_get_pro_player_riot_id",
+        "description": "Looks up a pro player alias and returns their Riot ID plus team/region metadata so you can link their OP.GG profile.",
+        "inputSchema": {
+          "properties": {
+            "player_name": {
+              "description": "Nickname, alias, or real name fragment of the pro player (e.g., Faker, Ruler, Deft).",
+              "type": "string"
+            },
+            "region": {
+              "description": "League region to constrain the lookup. Examples: KR, BR, EUNE",
+              "type": "string"
+            },
+            "return_suggestions": {
+              "description": "Set true to include close matches when the exact alias is not found.",
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "type": "object",
+          "required": [
+            "player_name",
+            "region"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_get_summoner_game_detail",
+        "description": "Returns full match detail (teams, participants, builds, bans) for a specific game id whenever the user drills into a single match. When the question is about one summoner's performance, also pass focus_riot_id (\"gameName#tagLine\"): the matching participant is flagged is_target=true — read the focused summoner's numbers from the participant row where is_target is true, never from a neighbouring participant. If no unique match is found, no row is flagged and data.game_detail.focus_error explains why.",
+        "inputSchema": {
+          "properties": {
+            "region": {
+              "description": "Server region code Examples: KR, BR, EUNE",
+              "type": "string"
+            },
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "game_id": {
+              "description": "Unique identifier for the target match.",
+              "pattern": "^[A-Za-z0-9_=%-]+$",
+              "type": "string"
+            },
+            "created_at": {
+              "description": "Match creation timestamp (ISO-8601).",
+              "format": "date-time",
+              "type": "string"
+            },
+            "focus_riot_id": {
+              "description": "Riot ID ('gameName#tagLine') of the summoner the user is asking about. The matching participant gets is_target=true — read that row's numbers; if no unique match is found, data.game_detail.focus_error explains why. Unless game_name/tag_line are given separately, this participant is also the only one keeping op_score_timeline.",
+              "type": "string"
+            },
+            "game_name": {
+              "description": "Riot ID game name before the \"#\" of the summoner being investigated (e.g., \"Faker\" from \"Faker#KR1\"). Only this participant keeps the minute-by-minute op_score_timeline; other participants' timelines are omitted. When omitted, no participant includes op_score_timeline.",
+              "type": "string"
+            },
+            "tag_line": {
+              "description": "Riot ID tag line following the \"#\" (e.g., \"KR1\" from \"Faker#KR1\").",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data.game_detail.average_tier_info.{border_image_url,division,tier}\n- data.game_detail.teams[].game_stat.{atakhan_kill,baron_kill,champion_first,champion_kill,dragon_kill,gold_earned,horde_kill,inhibitor_kill,is_win,rift_herald_kill,tower_kill}\n- data.game_detail.teams[].participants[].rune.{primary_page_id,primary_rune_id,secondary_page_id}\n- data.game_detail.teams[].participants[].stats.op_score_timeline_analysis.{last,left,right}\n- data.game_detail.teams[].participants[].stats.{assist,champion_level,death,gold_earned,kill,largest_critical_strike,largest_killing_spree,largest_multi_kill,minion_kill,neutral_minion_kill,neutral_minion_kill_enemy_jungle,neutral_minion_kill_team_jungle,op_score,op_score_rank,result,time_ccing_others,total_damage_dealt_to_champions,total_damage_taken,total_heal,vision_wards_bought_in_game,ward_place}\n- data.game_detail.teams[].participants[].summoner.{game_name,player,puuid,tagline}\n- data.game_detail.teams[].participants[].{champion_id,champion_name,is_target,items[],items_names[],position,role_bound_item,spells[],team_key}\n- data.game_detail.teams[].{banned_champions[],banned_champions_names[],key}\n- data.game_detail.{clips,created_at,game_length_second,game_map,game_type,id}\n\nServer-injected fields (returned automatically when applicable — do NOT request these in desired_output_fields):\n- data.game_detail.focus_error\n- data.game_detail.teams[].participants[].stats.largest_multi_kill_string\n\nField descriptions:\n- data.game_detail.focus_error: Present only when focus_riot_id matched no participant or was ambiguous — explains why; no row is flagged in that case\n- data.game_detail.teams[].participants[].is_target: True only for the participant matched by focus_riot_id — read the focused summoner's stats from this row\n- game_detail.game_type: Game queue type (SOLORANKED, FLEXRANKED, NORMAL, ARAM, etc.)\n- game_detail.average_tier_info: Average rank tier of players in the match\n- game_detail.teams.*.participants: Participants grouped under each team entry\n- game_detail.teams.*.participants.*.team_key: Team side (RED=bottom-right, BLUE=top-left)\n- game_detail.teams.*.participants.*.stats.op_score: OP.GG performance score (0-10 scale)\n- game_detail.teams.*.participants.*.stats.op_score_timeline: Minute-by-minute op_score snapshots; present only for the summoner passed via game_name/tag_line\n- game_detail.teams.*.participants.*.stats.minion_kill: Lane minions killed (CS from lane)\n- game_detail.teams.*.participants.*.stats.neutral_minion_kill: Jungle monsters killed (CS from jungle)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "region",
+            "game_id",
+            "created_at",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_get_summoner_profile",
+        "description": "Returns summoner profile with rank, tier, LP, win rate, and champion pool. MUST call for identity/profile/rank queries. DO NOT call for match history. Ask for region if not found.",
+        "inputSchema": {
+          "properties": {
+            "game_name": {
+              "description": "Riot ID game name before the \"#\" (e.g., \"Faker\" from \"Faker#KR1\")",
+              "type": "string"
+            },
+            "tag_line": {
+              "description": "Riot ID tag line following the \"#\" (e.g., \"KR1\" from \"Faker#KR1\")",
+              "type": "string"
+            },
+            "region": {
+              "description": "Server region code Examples: KR, BR, EUNE",
+              "type": "string"
+            },
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data.summoner.current_season_high_tiers.rank_entries[].game_type\n- data.summoner.current_season_high_tiers.rank_entries[].high_rank_info.{created_at,division,elo,lose,lp,tier,win}\n- data.summoner.current_season_high_tiers.season_id\n- data.summoner.highlight_info.scene_type[].{events[],mode}\n- data.summoner.highlight_info.{created_at,deleted_at,platform_id,puuid,summoner_id,user_type}\n- data.summoner.ladder_rank.{rank,total}\n- data.summoner.league_stats[].high_leagues[].{current_count,demotion_candidate_count,key,lp_threshold,promotion_candidate_count}\n- data.summoner.league_stats[].match_record.{lose,play,win}\n- data.summoner.league_stats[].tier_info.{border_image_url,division,level,lp,tier,tier_image_url}\n- data.summoner.league_stats[].{game_type,is_fresh_blood,is_hot_streak,is_inactive,is_veteran,lose,series,updated_at,win}\n- data.summoner.lp_histories[].tier_info.{border_image_url,division,level,lp,tier,tier_image_url}\n- data.summoner.lp_histories[].{created_at,elo_point}\n- data.summoner.most_champions.champion_stats[].{assist,champion_name,damage_dealt_to_champions,damage_taken,death,double_kill,game_length_second,gold_earned,id,kill,lose,minion_kill,neutral_minion_kill,op_score,penta_kill,play,quadra_kill,snowball_hits,snowball_throws,triple_kill,vision_wards_bought_in_game,win}\n- data.summoner.most_champions.{game_type,lose,play,season_id,win,year}\n- data.summoner.player.current_pro_team.pro_team.{acronym,cover_images,ended_at,esports_url,id,image_url,image_url_dark_mode,image_url_light_mode,is_active,league_id,name,nationality,short_name,started_at,type}\n- data.summoner.player.current_pro_team.{ended_at,is_starter,position,role,started_at}\n- data.summoner.player.{birth_country_code,birthdate,channels,esports_url,id,nationality_country_code,nickname,pro_team_careers,real_name}\n- data.summoner.previous_season_tiers[].rank_entries[].game_type\n- data.summoner.previous_season_tiers[].rank_entries[].high_rank_info.{created_at,division,elo,lose,lp,tier,win}\n- data.summoner.previous_season_tiers[].rank_entries[].rank_info.{created_at,division,elo,lose,lp,tier,win}\n- data.summoner.previous_season_tiers[].season_id\n- data.summoner.previous_seasons[].season_id\n- data.summoner.previous_seasons[].tier_info.{border_image_url,division,level,lp,tier,tier_image_url}\n- data.summoner.ranked_most_champions.my_champion_stats[].basic.{ace,assist,cs,damage_distribution,damage_participation,damage_to_champion,death,double_kill,double_kill_play,gold,kill,kill_participation,lane_lead,lane_score,lane_score_count,mvp,op_score,op_score_rank,penta_kill,penta_kill_play,quadra_kill,quadra_kill_play,triple_kill,triple_kill_play,vision_score,vision_ward,ward_kill,ward_placed}\n- data.summoner.ranked_most_champions.my_champion_stats[].extend.{buff_steal,cc,cc_make_kill,cc_score,damage_self_mitigated,damage_taken,damage_to_building,damage_to_objective,damage_to_turret,enemy_jungle_monster_kill,epic_monster_kill_near_enemy_jungler,epic_monster_steal_no_smite,evolution_first,evolution_none,evolution_second,faster_support_quest,heal,heal_to_team,inhibitor_kill,initial_crab_kill,invade_kill,invade_kill_play,invade_play,jungle_cs_10_minute,lane_advantage_7_minute,lane_cs_10_minute,magic_damage_to_champion,make_solo_kill,neutral_cs,object_steal,physical_damage_to_champion,save_ally,shield_to_team,solo_kill,true_damage_to_champion,turret_kill,turret_plate,ward_guard}\n- data.summoner.ranked_most_champions.my_champion_stats[].{champion_name,game_second,id,lose,play,win}\n- data.summoner.ranked_most_champions.{game_type,lose,play,season_id,win}\n- data.summoner.recent_champion_stats[].{assist,champion_name,death,id,kill,play,win}\n- data.summoner.{acct_id,game_name,has_highlight,id,internal_name,level,name,profile_image_url,puuid,recent_videos_added_count,region,renewable_at,revision_at,summoner_id,tagline,updated_at}\n\nField descriptions:\n- summoner.puuid: Riot Games PUUID (universal unique identifier across regions)\n- summoner.acct_id: Riot Games account ID (legacy identifier)\n- summoner.tagline: Riot ID tagline (the part after # in Name#TAG)\n- summoner.ladder_rank: Ranking position on the regional leaderboard\n- summoner.lp_histories: LP (League Points) history over time",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "game_name",
+            "tag_line",
+            "region",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_aram_augments",
+        "description": "Returns ARAM augment stats for a champion with localized names and descriptions. Only tier 3 or higher augments are included.",
+        "inputSchema": {
+          "properties": {
+            "champion_id": {
+              "description": "League of Legends champion ID (for example, 81 for Ezreal).",
+              "type": "integer"
+            },
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- champion_id\n- data.augments[].{desc,id,name,performance,popular,tier}\n- lang\n\nField descriptions:\n- id: ARAM augment identifier\n- name: Localized ARAM augment name\n- desc: Localized ARAM augment description\n- tier: ARAM augment tier rank; only 3 or higher are returned\n- performance: Performance score for the augment on the selected champion in ARAM\n- popular: Popularity score for the augment on the selected champion in ARAM",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_champion_details",
+        "description": "Returns ability, tip, lore, and stat metadata for up to 10 champions (skins/media trimmed for smaller payloads).",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "champions": {
+              "description": "Array of champion names in UPPER_SNAKE_CASE",
+              "default": [
+                "AHRI",
+                "YASUO",
+                "LUX"
+              ],
+              "minItems": 1,
+              "maxItems": 10,
+              "items": {
+                "type": "string",
+                "description": "Examples: ANNIE, OLAF, GALIO"
+              },
+              "type": "array"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data.champions[].info.{attack,defense,difficulty,magic}\n- data.champions[].passive.{description,name}\n- data.champions[].spells[].{cooldown_burn[],cooldown_burn_float[],cost_burn[],description,key,max_rank,name,range_burn[],tooltip}\n- data.champions[].stats.{armor,armorperlevel,attackdamage,attackdamageperlevel,attackrange,attackspeed,attackspeedperlevel,crit,critperlevel,hp,hpperlevel,hpregen,hpregenperlevel,movespeed,mp,mpperlevel,mpregen,mpregenperlevel,spellblock,spellblockperlevel}\n- data.champions[].{ally_tips[],blurb,enemy_tips[],id,key,lore,name,partype,release_date,tags[],title}\n- lang\n- requested_champions[]\n\nField descriptions:\n- partype: Resource type (mana, energy, rage, etc.)\n- evolve: Champion evolution information (true if champion can evolve abilities)\n- info.attack: Attack power rating (0-10 scale)\n- info.defense: Defensive capability rating (0-10 scale)\n- info.magic: Magic power rating (0-10 scale)\n- info.difficulty: Gameplay difficulty rating (0-10 scale)\n- stats.mp: Base mana/resource points\n- stats.spellblock: Base magic resistance\n- stats.hpregen: Health regeneration per 5 seconds\n- stats.mpregen: Mana regeneration per 5 seconds",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_champion_leaderboard",
+        "description": "Lists the top master+ players for a champion/region so you can study their builds and match stats.",
+        "inputSchema": {
+          "properties": {
+            "region": {
+              "description": "Server region code Examples: KR, BR, EUNE",
+              "type": "string"
+            },
+            "champion": {
+              "description": "Champion name in UPPER_SNAKE_CASE Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- champion\n- leaderboard[].most_champion_stat.{assist,damage_dealt_to_champions,damage_taken,death,double_kill,game_length_second,gold_earned,id,kill,lose,minion_kill,neutral_minion_kill,op_score,penta_kill,play,quadra_kill,snowball_hits,snowball_throws,triple_kill,vision_wards_bought_in_game,win}\n- leaderboard[].rank\n- leaderboard[].summoner.league_stats[].tier_info.{border_image_url,division,level,lp,tier,tier_image_url}\n- leaderboard[].summoner.league_stats[].{game_type,is_fresh_blood,is_hot_streak,is_inactive,is_veteran,lose,series,updated_at,win}\n- leaderboard[].summoner.{acct_id,game_name,id,internal_name,level,most_champions,name,player,profile_image_url,puuid,summoner_id,tagline,updated_at}\n- region\n",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "region",
+            "champion",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_champions",
+        "description": "Returns every champion's id, key, name, and release date in the requested language.",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data.champions[].{champion_id,key,name,release_date}\n- lang\n\nField descriptions:\n- key: Champion key (internal code name, e.g., MonkeyKing for Wukong)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_discounted_skins",
+        "description": "Retrieves information about champion skins that are currently on sale.",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "champion": {
+              "description": "Optional. Champion name in UPPER_SNAKE_CASE. If provided, only returns discounted skins for that champion. Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data[].{champion_id,champion_key,champion_name,cost,currency,discount_rate,ended_at,skin_id,skin_name,started_at}\n- lang\n\nField descriptions:\n- data.*.discount_rate: Discount rate (e.g., 0.5 for 50% off)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_items",
+        "description": "Returns localized items (ids, names, descriptions, build trees, gold costs) filtered by map (default Summoner's Rift).",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "map": {
+              "description": "Map identifier (SUMMONERS_RIFT, HOWLING_ABYSS, NEXUS_BLITZ, TEAMFIGHT_TACTICS, ARENA_MAP_1).",
+              "enum": [
+                "SUMMONERS_RIFT",
+                "HOWLING_ABYSS",
+                "NEXUS_BLITZ",
+                "TEAMFIGHT_TACTICS",
+                "ARENA_MAP_1"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_lane_meta_champions",
+        "description": "Returns lane-by-lane champion tiers with win/pick/ban rates, KDA, and tier rankings. Tier 1 champions are OP and easy to play - recommend them for strong picks. Filter by position or use \"all\" for every lane.",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "position": {
+              "description": "Lane position (top, mid, jungle, adc, support)",
+              "default": "all",
+              "enum": [
+                "all",
+                "none",
+                "top",
+                "mid",
+                "jungle",
+                "adc",
+                "support"
+              ],
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data.positions.adc[].{ban_rate,champion,is_rip,kda,kill,pick_rate,play,rank,rank_prev,rank_prev_patch,role_rate,tier,win,win_rate}\n- data.positions.jungle[].{ban_rate,champion,is_rip,kda,kill,pick_rate,play,rank,rank_prev,rank_prev_patch,role_rate,tier,win,win_rate}\n- data.positions.mid[].{ban_rate,champion,is_rip,kda,kill,pick_rate,play,rank,rank_prev,rank_prev_patch,role_rate,tier,win,win_rate}\n- data.positions.support[].{ban_rate,champion,is_rip,kda,kill,pick_rate,play,rank,rank_prev,rank_prev_patch,role_rate,tier,win,win_rate}\n- data.positions.top[].{ban_rate,champion,is_rip,kda,kill,pick_rate,play,rank,rank_prev,rank_prev_patch,role_rate,tier,win,win_rate}\n- lang\n- position_filter\n\nField descriptions:\n- position.*.is_rip: Whether champion is considered RIP (weak/unplayable) in this position\n- position.*.role_rate: Percentage of games this champion plays in this role vs other roles\n- position.*.kda: KDA ratio (Kills + Assists / Deaths)\n- position.*.tier: Tier ranking (1=OP, 2=Strong, 3=Good, 4=Average, 5=Weak)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_skin_stats_for_champion",
+        "description": "Lists a champion's skins in popularity rank order. Default ranking is by play count (1 = most played in real matches) — the natural answer for ambiguous popularity questions like \"which Aatrox skin is most popular?\". Pass sort_by=\"ownership\" ONLY when the user explicitly asks about ownership/possession (e.g., \"보유 기준\", \"가지고 있는 사람 많은 순\", \"owned by most\", \"collection-wise\", \"가장 많이 갖고 있는 스킨\"). Internal raw counts are NOT exposed in either mode — only rank position and skin identity. Base skin is always excluded since it inherits every match where no other skin was equipped (play mode) and is universally owned by default (ownership mode).",
+        "inputSchema": {
+          "properties": {
+            "champion": {
+              "description": "Required. Champion name in UPPER_SNAKE_CASE (e.g., AATROX, YASUO). Examples: ANNIE, OLAF, GALIO",
+              "type": "string"
+            },
+            "lang": {
+              "description": "Locale code used to localize skin names. Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "sort_by": {
+              "description": "Ranking metric. \"play\" (default) = how many games each skin was actually played — answers \"which skin is most popular?\" for ambiguous queries. \"ownership\" = how many accounts own each skin — use ONLY when the user explicitly mentions ownership/possession (\"보유\", \"owned by most\", \"collection\").",
+              "default": "play",
+              "enum": [
+                "play",
+                "ownership"
+              ],
+              "type": "string"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- champion_id\n- champion_key\n- champion_name\n- data[].{rank,skin_id,skin_name}\n- lang\n\nField descriptions:\n- data.*.rank: 1-based popularity ranking. Metric depends on sort_by input — 1 = most played (default) or most owned (sort_by=ownership). Internal raw counts are deliberately not exposed.\n- data.*.skin_id: Riot skin ID (numeric). Base skin is always excluded from this list.\n- data.*.skin_name: Localized skin display name for the requested lang. Null when the name cannot be resolved.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "champion",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_list_summoner_matches",
+        "description": "Returns recent match history with per-game stats for the target summoner only (excludes enemy stats). MUST call for match history, performance analysis, or improvement tips. DO NOT call for profile/rank queries. Use lol_get_summoner_game_detail for full game details with all players.",
+        "inputSchema": {
+          "properties": {
+            "game_name": {
+              "description": "Riot ID game name before the \"#\" (e.g., \"Faker\" from \"Faker#KR1\")",
+              "type": "string"
+            },
+            "tag_line": {
+              "description": "Riot ID tag line following the \"#\" (e.g., \"KR1\" from \"Faker#KR1\")",
+              "type": "string"
+            },
+            "region": {
+              "description": "Server region code Examples: KR, BR, EUNE",
+              "type": "string"
+            },
+            "lang": {
+              "description": "Locale code Examples: ar_AE, cs_CZ, de_DE",
+              "default": "en_US",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Maximum number of matches to return.",
+              "minimum": 5,
+              "maximum": 20,
+              "type": "integer"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- data.game_history[].average_tier_info.{border_image_url,division,tier}\n- data.game_history[].clips[].asset.{clip_uuid,duration,snapshot_url,thumbnail_url,url}\n- data.game_history[].clips[].{puuid,status,unavailable_code,use_case}\n- data.game_history[].participants[].rune.{primary_page_id,primary_rune_id,secondary_page_id}\n- data.game_history[].participants[].stats.op_score_timeline[].{score,second}\n- data.game_history[].participants[].stats.op_score_timeline_analysis.{last,left,right}\n- data.game_history[].participants[].stats.{assist,champion_level,death,gold_earned,kill,largest_critical_strike,largest_killing_spree,largest_multi_kill,minion_kill,neutral_minion_kill,neutral_minion_kill_enemy_jungle,neutral_minion_kill_team_jungle,op_score,op_score_rank,result,time_ccing_others,total_damage_dealt_to_champions,total_damage_taken,total_heal,vision_wards_bought_in_game,ward_place}\n- data.game_history[].participants[].summoner.player.{esports_url,nickname,real_name}\n- data.game_history[].participants[].summoner.{game_name,profile_image_url,puuid,tagline}\n- data.game_history[].participants[].{champion_id,champion_name,items[],items_names[],position,role_bound_item,spells[],team_key}\n- data.game_history[].teams[].game_stat.{atakhan_kill,baron_kill,champion_first,champion_kill,dragon_kill,gold_earned,horde_kill,inhibitor_kill,is_win,rift_herald_kill,tower_kill}\n- data.game_history[].teams[].{banned_champions[],banned_champions_names[],key}\n- data.game_history[].{created_at,game_length_second,game_map,game_type,id}\n\nField descriptions:\n- game_history.*.game_type: Game queue type (SOLORANKED, FLEXRANKED, NORMAL, ARAM, etc.)\n- game_history.*.average_tier_info: Average rank tier of players in the match\n- game_history.*.participants.*.team_key: Team side (RED=bottom-right, BLUE=top-left)",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "game_name",
+            "tag_line",
+            "region",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_esports_list_schedules",
+        "description": "Returns LoL esports schedules or results. Args: mode=\"schedule\" for future schedules from today, mode=\"result\" for latest completed match results beyond the old 7-day window, optional league such as \"lck\", \"kespa\", \"ewc\", \"msi\", or \"worlds\", optional team_name such as \"T1\", and optional limit up to 50 for result mode. Results include teams, leagues, scores, and match times in ISO 8601 UTC format. Always convert to user's timezone before presenting.",
+        "inputSchema": {
+          "properties": {
+            "mode": {
+              "description": "Use \"schedule\" for upcoming/future match schedules from today, or \"result\" for latest completed match results beyond the old 7-day window.",
+              "default": "schedule",
+              "enum": [
+                "schedule",
+                "result"
+              ],
+              "type": "string"
+            },
+            "league": {
+              "description": "Optional LoL esports league/tournament short name such as \"lck\", \"kespa\", \"ewc\", \"msi\", \"worlds\", \"lpl\", \"lec\", \"lta\", or \"lcp\".",
+              "enum": [
+                "lck",
+                "kespa",
+                "ewc",
+                "lpl",
+                "lec",
+                "lcs",
+                "ljl",
+                "vcs",
+                "cblol",
+                "lcl",
+                "lla",
+                "tcl",
+                "pcs",
+                "lco",
+                "lta south",
+                "lta north",
+                "lcp",
+                "first stand",
+                "fst",
+                "al",
+                "msi",
+                "worlds",
+                "lta"
+              ],
+              "type": "string"
+            },
+            "team_name": {
+              "description": "Optional esports team name or acronym to filter schedules/results, e.g. \"T1\", \"Gen.G\", \"HLE\", \"DK\", \"BLG\", or \"G2\".",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Optional maximum completed result matches to return in result mode (default 50, max 50). Ignored in schedule mode.",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 50,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lol_esports_list_team_standings",
+        "description": "Returns the latest team standings for the requested LoL league.",
+        "inputSchema": {
+          "properties": {
+            "short_name": {
+              "type": "string",
+              "description": "Examples: lck, kespa, ewc"
+            }
+          },
+          "type": "object",
+          "required": [
+            "short_name"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tft_get_champion_item_build",
+        "description": "TFT tool for retrieving champion item build information.",
+        "inputSchema": {
+          "properties": {
+            "champion_id": {
+              "description": "TFT champion ID (e.g., TFT17_Riven) to retrieve item builds for.",
+              "enum": [
+                "DA_NidaleeCougar18_AD",
+                "DA_Nidalee18_AP",
+                "DA_18_KhaZix",
+                "DA_Murkwolf18",
+                "DA_18_Yunara",
+                "DA_18_ElderDragon",
+                "DA_18_Morgana",
+                "DA_18_Leona",
+                "DA_18_Caitlyn",
+                "DA_18_Aphelios",
+                "DA_Cinderling18",
+                "DA_18_Lux_Primal",
+                "DA_18_Tristana",
+                "DA_18_Lux_Moonbeam",
+                "DA_18_Lillia",
+                "DA_18_MasterYi_AD",
+                "DA_18_GnarSmall",
+                "DA_18_Alune",
+                "DA_Lux18_Blackthorn",
+                "DA_18_LeBlanc",
+                "TFT18_SprykinSummonMelee",
+                "DA_KogMaw18_AD",
+                "DA_18_Veigar",
+                "DA_18_Elise",
+                "DA_Sentinel18",
+                "DA_18_Sentry",
+                "DA_Fiddlesticks18",
+                "DA_Gromp18_AD",
+                "DA_18_Teemo",
+                "DA_Karma18",
+                "DA_18_Maokai",
+                "DA_18_Varus",
+                "DA_18_Ivern",
+                "DA_Lux18_Base",
+                "DA_18_Akali_AD",
+                "DA_18_Lux_Sunbeam",
+                "DA_18_Lux_Inferno",
+                "DA_Draven18",
+                "DA_18_RekSai",
+                "DA_18_Warwick",
+                "DA_Amumu18",
+                "DA_CrimsonRaptor18",
+                "DA_18_Kobuko",
+                "DA_18_Ornn",
+                "DA_18_Ezreal",
+                "DA_18_Camille",
+                "DA_18_Kayle",
+                "DA_18_Sivir",
+                "DA_18_Rakan",
+                "DA_18_Alistar",
+                "DA_18_Lux_Coven",
+                "DA_Brambleback18",
+                "DA_18_Rammus",
+                "DA_18_Diana",
+                "DA_Vi18",
+                "DA_18_Xayah",
+                "DA_Gromp18_AP",
+                "DA_18_Malphite",
+                "DA_18_Ahri",
+                "DA_Krug18",
+                "DA_18_Kennen",
+                "DA_18_Zyra",
+                "DA_18_Cassiopeia",
+                "DA_18_Azir",
+                "DA_18_Soraka",
+                "DA_Scuttlecrab18",
+                "DA_Taric18",
+                "DA_18_Rengar",
+                "DA_18_Sejuani",
+                "DA_18_Lux_Fae",
+                "DA_18_Sett",
+                "DA_Lux18_Blossom",
+                "DA_18_Lux_Elderwood",
+                "DA_18_Hecarim",
+                "DA_18_Ashe",
+                "DA_18_Shen",
+                "DA_18_Yorick"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "champion_id"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tft_get_play_style",
+        "description": "This tool provides comments on the playstyle of TFT champions.",
+        "inputSchema": {
+          "properties": {
+            "region": {
+              "description": "The TFT region code used to find the player's profile and matches. Examples: kr, br, eune",
+              "type": "string"
+            },
+            "puuid": {
+              "description": "Riot Account PUUID; a 78-character URL-safe identifier (alphanumeric with `-` and `_`); obtainable from the lol_get_summoner_profile tool response or from an external Riot API response.",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "region",
+            "puuid"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tft_list_augments",
+        "description": "Retrieves metadata for all Teamfight Tactics augments with localized names and descriptions in a table-friendly JSON (headers/rows/header_description). Returns apiName, desc, name, tier, and imageUrl for all augments in the specified language.",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: en_US, ko_KR, ja_JP",
+              "default": "en_US",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tft_list_champions_for_item",
+        "description": "TFT tool for retrieving champion recommendations for a specific item.",
+        "inputSchema": {
+          "properties": {
+            "item_id": {
+              "description": "TFT item ID (e.g., TFT17_AnimaSquadItem_Tier1_RocketSwarm) to get champion recommendations for.",
+              "enum": [
+                "DA_18_EmblemBlackthorn",
+                "DA_18_EmblemBlossom",
+                "DA_18_EmblemBrawler",
+                "DA_18_EmblemCoven",
+                "DA_18_EmblemDefender",
+                "DA_18_EmblemElderwood",
+                "DA_18_EmblemExecutioner",
+                "DA_18_EmblemFae",
+                "DA_18_EmblemFloraFatalis",
+                "DA_18_EmblemFloraFatalisAugment",
+                "DA_18_EmblemHunter",
+                "DA_18_EmblemInferno",
+                "DA_18_EmblemInvoker",
+                "DA_18_EmblemJuggernaut",
+                "DA_18_EmblemLunar",
+                "DA_18_EmblemPrimal",
+                "DA_18_EmblemRapidfire",
+                "DA_18_EmblemSlayer",
+                "DA_18_EmblemSpellweaver",
+                "DA_18_EmblemSprykin",
+                "DA_18_EmblemVanguard",
+                "DA_AdaptiveHelm",
+                "DA_AdaptiveHelm_Radiant",
+                "DA_ArchangelsStaff",
+                "DA_ArchangelsStaffRadiant",
+                "DA_Artifact_AegisOfDawn",
+                "DA_Artifact_AegisOfDusk",
+                "DA_Artifact_BlightingJewel",
+                "DA_Artifact_Dawncore",
+                "DA_Artifact_EternalPact",
+                "DA_Artifact_Fishbones",
+                "DA_Artifact_ForbiddenIdol",
+                "DA_Artifact_GamblersBlade",
+                "DA_Artifact_GoldCollector",
+                "DA_Artifact_HellfireHatchet",
+                "DA_Artifact_HorizonFocus",
+                "DA_Artifact_Hullcrusher",
+                "DA_Artifact_InfinityForce",
+                "DA_Artifact_LichBane",
+                "DA_Artifact_LightshieldCrest",
+                "DA_Artifact_LudensTempest",
+                "DA_Artifact_Manazane",
+                "DA_Artifact_Mittens",
+                "DA_Artifact_MogulsMail",
+                "DA_Artifact_NavoriFlickerblade",
+                "DA_Artifact_RapidFireCannon",
+                "DA_Artifact_SeekersArmguard",
+                "DA_Artifact_SilvermereDawn",
+                "DA_Artifact_StatikkShiv",
+                "DA_Artifact_TheIndomitable",
+                "DA_Artifact_TitanicHydra",
+                "DA_Artifact_VoidGauntlet",
+                "DA_Artifact_WitsEnd",
+                "DA_Artifact_ZhonyasParadox",
+                "DA_BlastPotion18",
+                "DA_BlastPotion18_Radiant",
+                "DA_Bloodthirster",
+                "DA_BloodthirsterRadiant",
+                "DA_BlueBuff",
+                "DA_BlueBuffRadiant",
+                "DA_BrambleVest",
+                "DA_BrambleVestRadiant",
+                "DA_Component_BFSword",
+                "DA_Component_ChainVest",
+                "DA_Component_FryingPan",
+                "DA_Component_GiantsBelt",
+                "DA_Component_NeedlesslyLargeRod",
+                "DA_Component_NegatronCloak",
+                "DA_Component_RecurveBow",
+                "DA_Component_SparringGloves",
+                "DA_Component_Spatula",
+                "DA_Component_TearOfTheGoddess",
+                "DA_Crownguard",
+                "DA_CrownguardRadiant",
+                "DA_Deathblade",
+                "DA_DeathbladeRadiant",
+                "DA_DragonsClaw",
+                "DA_DragonsClawRadiant",
+                "DA_EdgeOfNight",
+                "DA_EdgeOfNightRadiant",
+                "DA_Evenshroud",
+                "DA_EvenshroudRadiant",
+                "DA_GargoyleStoneplate",
+                "DA_GargoyleStoneplate_Radiant",
+                "DA_GiantSlayer",
+                "DA_GiantSlayer_Radiant",
+                "DA_GuinsoosRageblade",
+                "DA_GuinsoosRagebladeRadiant",
+                "DA_HandOfJustice",
+                "DA_HandOfJusticeRadiant",
+                "DA_HealthPotion18",
+                "DA_HealthPotion18_Radiant",
+                "DA_HextechGunblade",
+                "DA_HextechGunbladeRadiant",
+                "DA_InfinityEdge",
+                "DA_InfinityEdgeRadiant",
+                "DA_IonicSpark",
+                "DA_IonicSparkRadiant",
+                "DA_Item_Artifact_TalismanOfAscension",
+                "DA_JeweledGauntlet",
+                "DA_JeweledGauntletRadiant",
+                "DA_KrakensFury",
+                "DA_KrakensFury_Radiant",
+                "DA_LastWhisper",
+                "DA_LastWhisperRadiant",
+                "DA_ManaPotion18",
+                "DA_ManaPotion18_Radiant",
+                "DA_Morellonomicon",
+                "DA_MorellonomiconRadiant",
+                "DA_NashorsTooth",
+                "DA_NashorsToothRadiant",
+                "DA_ProtectorsVow",
+                "DA_ProtectorsVowRadiant",
+                "DA_Quicksilver",
+                "DA_QuicksilverRadiant",
+                "DA_RabadonsDeathcap",
+                "DA_RabadonsDeathcap_Radiant",
+                "DA_RedBuff",
+                "DA_RedBuffRadiant",
+                "DA_SpearOfShojin",
+                "DA_SpearOfShojinRadiant",
+                "DA_SpiritVisage",
+                "DA_SpiritVisage_Radiant",
+                "DA_SteadfastHeart",
+                "DA_SteadfastHeartRadiant",
+                "DA_SteraksGage",
+                "DA_SteraksGageRadiant",
+                "DA_StrikersFlail",
+                "DA_StrikersFlailRadiant",
+                "DA_SunfireCape",
+                "DA_SunfireCape_Radiant",
+                "DA_TacticiansCape",
+                "DA_TacticiansCrown",
+                "DA_TacticiansShield",
+                "DA_ThiefsGloves",
+                "DA_ThiefsGlovesRadiant",
+                "DA_TitansResolve",
+                "DA_TitansResolve_Radiant",
+                "DA_VoidStaff",
+                "DA_VoidStaffRadiant",
+                "DA_WarmogsArmor",
+                "DA_WarmogsArmorRadiant"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "item_id"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tft_list_item_combinations",
+        "description": "TFT tool for retrieving information about item combinations and recipes.",
+        "inputSchema": {
+          "properties": {
+            "lang": {
+              "description": "Locale code Examples: en_US, ko_KR, ja_JP",
+              "default": "en_US",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tft_list_meta_decks",
+        "description": "TFT deck list tool for retrieving current meta decks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "valorant_list_agent_compositions_for_map",
+        "description": "Retrieve agent composition data for a Valorant map.",
+        "inputSchema": {
+          "properties": {
+            "map_id": {
+              "description": "Valorant map identifier (e.g., ascent, bind, lotus).",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "map_id"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "valorant_list_agent_statistics",
+        "description": "Retrieve character statistics data for Valorant, optionally filtered by map.",
+        "inputSchema": {
+          "properties": {
+            "map_id": {
+              "description": "Optional Valorant map identifier (e.g., ascent, bind).",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "valorant_list_agents",
+        "description": "Returns compact Valorant agent metadata with each agent name and two non-passive skill names localized across supported languages.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "outputSchema": {
+          "items": {
+            "properties": {
+              "agent_id": {
+                "description": "OP.GG Valorant agent identifier.",
+                "type": "string"
+              },
+              "name": {
+                "description": "Default English agent name.",
+                "type": "string"
+              },
+              "names": {
+                "description": "Agent names keyed by supported OP.GG locale.",
+                "type": "object"
+              },
+              "skills": {
+                "description": "First two non-passive skills for the agent.",
+                "items": {
+                  "properties": {
+                    "slot": {
+                      "description": "Valorant ability slot from the OP.GG meta payload.",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Default English skill name.",
+                      "type": "string"
+                    },
+                    "names": {
+                      "description": "Skill names keyed by supported OP.GG locale.",
+                      "type": "object"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "slot",
+                    "name",
+                    "names"
+                  ]
+                },
+                "type": "array"
+              }
+            },
+            "type": "object",
+            "required": [
+              "agent_id",
+              "name",
+              "names",
+              "skills"
+            ]
+          },
+          "type": "array"
+        }
+      },
+      {
+        "name": "valorant_list_leaderboard",
+        "description": "Fetch Valorant leaderboard by region",
+        "inputSchema": {
+          "properties": {
+            "region": {
+              "type": "string",
+              "description": "Examples: ap, br, eu"
+            },
+            "desired_output_fields": {
+              "title": "Output fields to extract",
+              "description": "Select ONLY from fields below. This is a CLOSED SET. Do NOT invent new field names.\n\nAvailable fields:\n- current_page\n- data[].stat.{assists,bodyShots,deaths,defeats,draws,gameCount,headShots,kills,legShots,rounds,score,wins}\n- data[].{badges,competitiveTier,gameName,leaderboardRank,level,mostCharacters[],numberOfWins,playerCardId,playerTitleId,puuid,rankedRating,tagLine}\n- from\n- lastUpdatedAt\n- last_page\n- per_page\n- to\n- total\n",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "required": [
+            "region",
+            "desired_output_fields"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "valorant_list_maps",
+        "description": "Retrieve compact Valorant map metadata for maps with agent composition data, including map IDs and localized map names across supported languages.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "outputSchema": {
+          "items": {
+            "properties": {
+              "map_id": {
+                "description": "OP.GG Valorant map identifier.",
+                "type": "string"
+              },
+              "name": {
+                "description": "Default English map name.",
+                "type": "string"
+              },
+              "names": {
+                "description": "Map names keyed by supported OP.GG locale.",
+                "type": "object"
+              }
+            },
+            "type": "object",
+            "required": [
+              "map_id",
+              "name",
+              "names"
+            ]
+          },
+          "type": "array"
+        }
+      },
+      {
+        "name": "valorant_list_player_matches",
+        "description": "Retrieve match history for a Valorant player using their game name and tag line.",
+        "inputSchema": {
+          "properties": {
+            "game_name": {
+              "description": "Riot ID game name before the \"#\" (e.g., \"Faker\" from \"Faker#KR1\")",
+              "type": "string"
+            },
+            "tag_line": {
+              "description": "Riot ID tag line following the \"#\" (e.g., \"KR1\" from \"Faker#KR1\")",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "required": [
+            "game_name",
+            "tag_line"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        }
+      }
+    ]
+  }
+}

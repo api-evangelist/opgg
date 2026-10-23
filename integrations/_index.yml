@@ -31,3 +31,16 @@
     year: '2017'
   status: not-a-workflow
   arazzo: null
+- slug: opgg-discord-discord-app-directory
+  label: Discord (discord-app-directory)
+  partner: discord
+  partner_name: Discord (discord-app-directory)
+  category: Games, Entertainment
+  type: marketplace
+  marketplace: discord-app-directory
+  channel: partner-built
+  evidence: https://discord.com/discovery/applications/589065324834324500
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

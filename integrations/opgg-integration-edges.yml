@@ -26,6 +26,25 @@ edges:
     year: '2017'
   detected_by: sweep-accelerator-portfolios.py
   first_seen: '2026-10-21'
+- partner_name: Discord (discord-app-directory)
+  partner: discord
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: discord-app-directory
+  evidence: https://discord.com/discovery/applications/589065324834324500
+  mirror_of: discord/integrations/discord-integration-edges.yml
+  apps:
+  - OP.GG
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Games, Entertainment
+  publisher_verified:
+  - discord-verified-app
 generated: '2026-10-21'
 method: searched
 source:
@@ -40,3 +59,4 @@ checked:
 - https://www.antler.co/portfolio
 - https://www.techstars.com/portfolio
 - https://www.ycombinator.com/companies
+- discord/integrations/discord-integration-edges.yml

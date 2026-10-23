@@ -9,10 +9,13 @@
       "method": "discovered"
     },
     {
-      "source": "https://github.com/opgginc",
-      "error": "HTTPError"
+      "source": "https://log.op.gg/blog/feed/",
+      "feed_url": "https://log.op.gg/blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
     }
   ],
   "post_count": 0,
-  "fetched": "2026-10-10T13:15:00Z"
+  "fetched": "2026-10-17T14:53:57Z"
 }
